@@ -18,7 +18,8 @@
             <span><i>♥</i><b id="reputation">1.0</b><small>REP</small></span>
             <span><i>⌂</i><b id="adoptions">0</b><small>HOMED</small></span>
           </section>
-          <section class="objectives"><header><span>TODAY'S TRAINING</span><b id="objective-count">0/5</b></header><div id="objective-list"></div></section>
+          <button id="tasks-toggle" class="tasks-toggle" type="button" aria-expanded="false"><span>✓</span> TASKS <b id="task-badge">5</b></button>
+          <section id="objectives-panel" class="objectives collapsed"><header><span>TODAY'S TRAINING</span><b id="objective-count">0/5</b><button id="tasks-close" aria-label="Close tasks">×</button></header><div id="objective-list"></div></section>
           <button id="prompt" type="button" class="prompt hidden" aria-label="Interact"></button>
           <div id="toast" class="toast hidden"></div>
         </div>
@@ -39,3 +40,4 @@
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
+
