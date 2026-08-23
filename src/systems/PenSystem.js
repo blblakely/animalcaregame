@@ -1,25 +1,11 @@
 // Pen geometry and progression live in data so a future build mode can replace
 // bounds, capacity, slots, and gates without rewriting animal logic.
-export const PEN_DEFINITIONS = {
-  Dog: {
-    id:'dog', label:'Dog Pen', capacity:4,
-    bounds:{x:56,y:122,width:355,height:78}, gate:{x:246,y:214},
-    bowlSlots:[{id:'dog-food',kind:'food',x:377,y:188},{id:'dog-water',kind:'water',x:72,y:188}],
-    enrichmentSlots:[{x:120,y:166},{x:190,y:152},{x:270,y:170},{x:335,y:150}]
-  },
-  Rabbit: {
-    id:'rabbit', label:'Rabbit Pen', capacity:4,
-    bounds:{x:452,y:122,width:314,height:78}, gate:{x:598,y:214},
-    bowlSlots:[{id:'rabbit-food',kind:'food',x:735,y:188},{id:'rabbit-water',kind:'water',x:468,y:188}],
-    enrichmentSlots:[{x:510,y:166},{x:565,y:148},{x:630,y:170},{x:690,y:150}]
-  },
-  Cat: {
-    id:'cat', label:'Cat Pen', capacity:5,
-    bounds:{x:804,y:122,width:350,height:78}, gate:{x:958,y:214},
-    bowlSlots:[{id:'cat-food',kind:'food',x:1130,y:188},{id:'cat-water',kind:'water',x:820,y:188}],
-    enrichmentSlots:[{x:860,y:166},{x:915,y:148},{x:985,y:170},{x:1045,y:148},{x:1100,y:168}]
-  }
-};
+import { PEN_LAYOUT } from '../data/shelterLayout.js';
+
+export const PEN_DEFINITIONS = Object.fromEntries(Object.entries(PEN_LAYOUT).map(([species,p])=>[species,{
+  id:species.toLowerCase(),label:`${species} Pen`,capacity:p.capacity,bounds:p.bounds,gate:p.gate,
+  bowlSlots:p.bowls,enrichmentSlots:p.enrichment.map(([x,y])=>({x,y}))
+}]));
 
 export class PenSystem {
   constructor(animalSystem){
