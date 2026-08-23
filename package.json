@@ -1,0 +1,19 @@
+{
+  "name": "paw-haven",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --base ./",
+    "build": "vite build --base ./",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.3",
+    "vitest": "^3.2.4"
+  }
+}
