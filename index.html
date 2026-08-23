@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#163c35" />
+    <meta name="description" content="Run a cozy animal adoption center in this playable Phaser game." />
+    <title>Paw Haven — Animal Adoption Center</title>
+  </head>
+  <body>
+    <div id="app">
+      <main id="game-shell" aria-label="Paw Haven game">
+        <div id="game"></div>
+        <div id="hud" class="hidden" aria-live="polite">
+          <section class="brand-chip"><span class="paw">●</span><span><b>PAW HAVEN</b><small>ADOPTION CENTER</small></span></section>
+          <section class="stats">
+            <span><i>¤</i><b id="money">$120</b></span>
+            <span><i>♥</i><b id="reputation">1.0</b><small>REP</small></span>
+            <span><i>⌂</i><b id="adoptions">0</b><small>HOMED</small></span>
+          </section>
+          <section class="objectives"><header><span>TODAY'S TRAINING</span><b id="objective-count">0/5</b></header><div id="objective-list"></div></section>
+          <button id="prompt" type="button" class="prompt hidden" aria-label="Interact"></button>
+          <div id="toast" class="toast hidden"></div>
+        </div>
+        <section id="title-screen" class="title-screen">
+          <div class="title-card">
+            <div class="sun-mark"><span>♥</span></div>
+            <p class="eyebrow">A COZY MANAGEMENT GAME</p>
+            <h1>PAW<br/><em>HAVEN</em></h1>
+            <p>Care for every personality.<br/>Find every animal a home.</p>
+            <button id="start-button">OPEN THE SHELTER <span>→</span></button>
+            <small>WASD / ARROWS TO MOVE · E TO INTERACT</small>
+          </div>
+          <aside class="title-note"><b>Today's note</b><span>Three new friends are waiting to meet you!</span></aside>
+        </section>
+        <div id="modal-root"></div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
