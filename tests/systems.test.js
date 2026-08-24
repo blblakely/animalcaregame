@@ -1,6 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {AnimalSystem} from '../src/systems/AnimalSystem.js';import {EconomySystem} from '../src/systems/EconomySystem.js';import {AdoptionSystem} from '../src/systems/AdoptionSystem.js';import {IntakeSystem} from '../src/systems/IntakeSystem.js';import {EnrichmentSystem} from '../src/systems/EnrichmentSystem.js';import {PenSystem,PEN_DEFINITIONS} from '../src/systems/PenSystem.js';
-import {NAV_NODES,NAV_EDGES,VIEWING_SPOTS} from '../src/data/shelterLayout.js';
+import {PENS,VIEWING,DESTINATIONS,isPlayerWalkable,isPublicWalkable} from '../src/data/shelterGrid.js';
+import {GridSystem} from '../src/systems/GridSystem.js';
 const setup=()=>{const animals=new AnimalSystem(()=>.1);animals.seed();const pens=new PenSystem(animals);return{animals,pens}};
 describe('core systems',()=>{
  it('creates starter species with unique traits',()=>{const{animals}=setup();expect(animals.animals.map(a=>a.species)).toEqual(['Dog','Cat','Rabbit']);animals.animals.forEach(a=>expect(new Set(a.traits).size).toBe(2))});
@@ -8,8 +9,9 @@ describe('core systems',()=>{
  it('adopter preferences never duplicate and either one scores',()=>{for(let n=0;n<30;n++){const sys=new AdoptionSystem(()=>((n*7)%29)/29),v=sys.generate();expect(v.activity).not.toBe(v.wish);expect(sys.score({species:v.species,traits:[v.wish]},v)).toBeGreaterThan(65)}});
 });
 describe('rebuilt shelter map',()=>{
- it('keeps every required destination connected to the entrance',()=>{const seen=new Set(['entrance']),queue=['entrance'];while(queue.length){for(const next of NAV_EDGES[queue.shift()]||[])if(!seen.has(next)){seen.add(next);queue.push(next)}}expect(Object.keys(NAV_NODES).every(name=>seen.has(name))).toBe(true)});
- it('provides multiple reservable viewing positions per species',()=>{expect(Object.values(VIEWING_SPOTS).every(spots=>spots.length>=3)).toBe(true)});
+ it('finds A* routes from entrance to every public destination',()=>{const grid=new GridSystem();for(const goal of Object.values(DESTINATIONS).filter(g=>g.r<22))expect(grid.path(DESTINATIONS.entrance,goal).length).toBeGreaterThan(0)});
+ it('makes gates player-walkable while keeping NPCs out of pens',()=>{for(const p of Object.values(PENS)){for(const g of p.gate){expect(isPlayerWalkable(g.c,g.r)).toBe(true);expect(isPublicWalkable(g.c,g.r)).toBe(false)}for(const t of p.interior)expect(isPublicWalkable(t.c,t.r)).toBe(false)}});
+ it('provides multiple valid viewing positions per species',()=>{expect(Object.values(VIEWING).every(spots=>spots.length>=3&&spots.every(t=>isPublicWalkable(t.c,t.r)))).toBe(true)});
 });
 describe('pen management',()=>{
  it('uses independent editable species capacities',()=>{const{animals,pens}=setup();expect(pens.capacityRows().map(r=>r.capacity)).toEqual([4,4,5]);while(pens.hasSpace('Dog'))animals.create('Dog','dog');expect(pens.hasSpace('Dog')).toBe(false);expect(pens.hasSpace('Rabbit')).toBe(true)});
