@@ -16,7 +16,7 @@ describe('rebuilt shelter map',()=>{
  it('provides multiple valid viewing positions per species',()=>{expect(Object.values(VIEWING).every(spots=>spots.length>=3&&spots.every(t=>isPublicWalkable(t.c,t.r)))).toBe(true)});
  it('keeps NPC routes on defined lanes and away from furniture',()=>{const grid=new GridSystem();for(const spots of Object.values(VIEWING))for(const goal of spots){const path=grid.path(DESTINATIONS.entrance,goal,(c,r)=>grid.npcWalkable(c,r));expect(path.length).toBeGreaterThan(0);expect(path.every(t=>isNpcWalkable(t.c,t.r))).toBe(true)}for(const o of OBJECTS)expect(isNpcWalkable(o.c,o.r)).toBe(false)});
  it('keeps every NPC fallback waiting tile reachable',()=>{const grid=new GridSystem();for(const goal of SAFE_WAIT)expect(grid.path(DESTINATIONS.entrance,goal,(c,r)=>grid.npcWalkable(c,r)).length).toBeGreaterThan(0)});
- it('uses walking frames rather than the dog sit frame',()=>{expect(animalWalkColumn('Dog',1,0,0)).toBe(6);expect(animalWalkColumn('Dog',1,0,1)).toBe(6);expect([animalWalkColumn('Cat',1,0,0),animalWalkColumn('Cat',1,0,1)]).toEqual([6,7])});
+ it('uses two dedicated side-walk frames for dogs and cats',()=>{expect([animalWalkColumn('Dog',1,0,0),animalWalkColumn('Dog',1,0,1)]).toEqual([6,7]);expect([animalWalkColumn('Cat',1,0,0),animalWalkColumn('Cat',1,0,1)]).toEqual([6,7])});
  it('faces rabbit side frames toward travel direction',()=>{expect(animalWalkColumn('Rabbit',1,0,0)).toBe(7);expect(animalWalkColumn('Rabbit',1,0,1)).toBe(8)});
 });
 describe('furniture build mode data',()=>{
