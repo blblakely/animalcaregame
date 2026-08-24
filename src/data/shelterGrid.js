@@ -22,17 +22,17 @@ for(const [start,end] of [[0,2],[6,7],[8,9],[13,15],[16,17],[21,26],[27,30],[34,
 mark(rectCells(7,14,1,9),'wall');mark(rectCells(15,14,1,9),'wall');mark(rectCells(26,14,1,9),'wall');
 
 export const OBJECTS=[
- {id:'pantry-shelves',room:'pantry',c:1,r:18,w:5,h:3,type:'food',label:'Food pantry',display:{w:154,h:132}},
- {id:'wash-station',room:'cleaning',c:9,r:18,w:4,h:3,type:'cleaning',label:'Wash station',display:{w:120,h:132}},
- {id:'waiting-bench',room:'lobby',c:16,r:17,w:2,h:2,type:'decor',display:{w:62,h:112}},
- {id:'adoption-desk',room:'lobby',c:22,r:18,w:3,h:2,type:'desk',label:'Adoption desk',display:{w:108,h:112}},
- {id:'office-cabinet',room:'office',c:28,r:17,w:2,h:3,type:'decor',display:{w:52,h:112}},
- {id:'intake-desk',room:'office',c:32,r:18,w:4,h:2,type:'computer',label:'Intake computer',display:{w:128,h:112}}
+ {id:'pantry-shelves',room:'pantry',c:1,r:18,w:5,h:3,type:'food',label:'Food pantry',display:{w:154,h:132},movable:false,rotatable:false,fixed:true},
+ {id:'wash-station',room:'cleaning',c:9,r:18,w:4,h:3,type:'cleaning',label:'Wash station',display:{w:120,h:132},movable:false,rotatable:false,fixed:true},
+ {id:'waiting-bench',room:'lobby',c:16,r:17,w:2,h:2,type:'decor',display:{w:62,h:112},movable:true,rotatable:true,fixed:false,catalogId:'lobby-bench'},
+ {id:'adoption-desk',room:'lobby',c:22,r:18,w:3,h:2,type:'desk',label:'Adoption desk',display:{w:108,h:112},movable:false,rotatable:false,fixed:true},
+ {id:'office-cabinet',room:'office',c:28,r:17,w:2,h:3,type:'decor',display:{w:52,h:112},movable:true,rotatable:true,fixed:false,catalogId:'filing-cabinet'},
+ {id:'intake-desk',room:'office',c:32,r:18,w:4,h:2,type:'computer',label:'Intake computer',display:{w:128,h:112},movable:false,rotatable:false,fixed:true}
 ];
-for(const o of OBJECTS)mark(rectCells(o.c,o.r,o.w,o.h),'furniture');
+for(const o of OBJECTS.filter(o=>o.fixed))mark(rectCells(o.c,o.r,o.w,o.h),'furniture');
 
 export const VIEWING={Dog:[{c:3,r:10},{c:6,r:11},{c:9,r:10}],Cat:[{c:15,r:10},{c:18,r:11},{c:21,r:10}],Rabbit:[{c:28,r:10},{c:31,r:11},{c:34,r:10}]};
-export const SAFE_WAIT=[{c:4,r:13},{c:11,r:13},{c:18,r:13},{c:25,r:13},{c:33,r:13}];
+export const SAFE_WAIT=[{c:4,r:12},{c:11,r:12},{c:18,r:12},{c:25,r:12},{c:33,r:12}];
 export const DESTINATIONS={entrance:{c:19,r:21},lobby:{c:19,r:18},reception:{c:21,r:17},pantry:{c:4,r:16},cleaning:{c:11,r:16},office:{c:32,r:16},exit:{c:19,r:22}};
 export const tileType=(c,r)=>blocked.get(key(c,r))||'floor';
 export const isPlayerWalkable=(c,r)=>['floor','gate'].includes(tileType(c,r));
@@ -41,6 +41,8 @@ export const isPublicWalkable=(c,r)=>c>=0&&r>=0&&c<COLS&&r<ROWS&&tileType(c,r)==
 // beside walls or between furniture. Player movement remains unrestricted.
 const npcLaneCells=[...rectCells(1,9,36,4),...rectCells(17,13,4,10),...rectCells(3,13,3,5),...rectCells(10,13,3,5),...rectCells(31,13,4,5)];
 const npcLaneKeys=new Set(npcLaneCells.map(t=>key(t.c,t.r)));
+export const NPC_LANE_CELLS=[...npcLaneCells];
+export const REQUIRED_DESTINATIONS=[DESTINATIONS.lobby,DESTINATIONS.pantry,DESTINATIONS.cleaning,DESTINATIONS.office,...Object.values(VIEWING).flat(),DESTINATIONS.exit];
 export const isNpcWalkable=(c,r)=>npcLaneKeys.has(key(c,r))&&isPublicWalkable(c,r);
 export const isAnimalWalkable=(species,c,r)=>PENS[species].interior.some(t=>t.c===c&&t.r===r);
 export const worldCenter=(c,r)=>({x:c*TILE_SIZE+TILE_SIZE/2,y:r*TILE_SIZE+TILE_SIZE/2});
