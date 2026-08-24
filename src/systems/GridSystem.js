@@ -1,4 +1,4 @@
-import {TILE_SIZE,COLS,ROWS,key,tileType,isPlayerWalkable,isPublicWalkable,isAnimalWalkable,worldCenter} from '../data/shelterGrid.js';
+import {TILE_SIZE,COLS,ROWS,key,tileType,isPlayerWalkable,isPublicWalkable,isNpcWalkable,isAnimalWalkable,worldCenter} from '../data/shelterGrid.js';
 export class GridSystem{
  constructor(){this.dynamic=new Map()}
  cell(x,y){return{c:Math.floor(x/TILE_SIZE),r:Math.floor(y/TILE_SIZE)}}
@@ -6,6 +6,7 @@ export class GridSystem{
  type(c,r){return this.dynamic.get(key(c,r))||tileType(c,r)}
  playerWalkable(c,r){return isPlayerWalkable(c,r)&&!this.dynamic.has(key(c,r))}
  publicWalkable(c,r){return isPublicWalkable(c,r)&&!this.dynamic.has(key(c,r))}
+ npcWalkable(c,r){return isNpcWalkable(c,r)&&!this.dynamic.has(key(c,r))}
  animalWalkable(species,c,r){return isAnimalWalkable(species,c,r)&&!this.dynamic.has(key(c,r))}
  occupy(cells,type='occupied'){if(cells.some(t=>this.dynamic.has(key(t.c,t.r))))return false;cells.forEach(t=>this.dynamic.set(key(t.c,t.r),type));return true}
  release(cells){cells.forEach(t=>this.dynamic.delete(key(t.c,t.r)))}
